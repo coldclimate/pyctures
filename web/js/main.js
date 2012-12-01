@@ -1,12 +1,13 @@
-require(["jquery", "lodash/lodash", "bootstrap"], function($, _ ) {
-    //the jquery.alpha.js and jquery.beta.js plugins have been loaded.
-    console.log("underscore1",_);
+require(["jquery", "lodash/lodash", "bootstrap"], function($, _) {
+    
+    var strImgSourceRoot="images/source/",
+        strImgThumbRoot="images/thumbs/";
     $(function() {
-console.log("underscore2",_);
+
         _fnDisplayPictures = function(objPictures) {
             _.each(objPictures, function(objPicture) {
                 var img = $('<img>');
-                img.attr('src', objPicture.filename);
+                img.attr('src', strImgSourceRoot+objPicture.filename);
                 img.appendTo('#pictures');
             });
 
