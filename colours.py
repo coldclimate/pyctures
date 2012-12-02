@@ -4,8 +4,8 @@
 
 import glob
 import os
-import io
 import json
+
 from collections import namedtuple
 from math import sqrt
 import random
@@ -17,6 +17,7 @@ except ImportError:
 Point = namedtuple('Point', ('coords', 'n', 'ct'))
 Cluster = namedtuple('Cluster', ('points', 'center', 'n'))
 
+
 def get_points(img):
     points = []
     w, h = img.size
@@ -26,8 +27,10 @@ def get_points(img):
 
 rtoh = lambda rgb: '#%s' % ''.join(('%02x' % p for p in rgb))
 
+
 def colorz(filename, n=5):
     img = Image.open(filename)
+    theFileName, fileExtension = os.path.splitext(filename)
     img.thumbnail((200, 200))
     w, h = img.size
 
@@ -36,10 +39,12 @@ def colorz(filename, n=5):
     rgbs = [map(int, c.center.coords) for c in clusters]
     return map(rtoh, rgbs)
 
+
 def euclidean(p1, p2):
     return sqrt(sum([
         (p1.coords[i] - p2.coords[i]) ** 2 for i in range(p1.n)
     ]))
+
 
 def calculate_center(points, n):
     vals = [0.0 for i in range(n)]
@@ -49,6 +54,7 @@ def calculate_center(points, n):
         for i in range(n):
             vals[i] += (p.coords[i] * p.ct)
     return Point([(v / plen) for v in vals], n, 1)
+
 
 def kmeans(points, k, min_diff):
     clusters = [Cluster([p], p, p.n) for p in random.sample(points, k)]
@@ -80,11 +86,15 @@ def kmeans(points, k, min_diff):
 
 data = []
 
-os.chdir("./imgs")
+os.chdir("./imgs/source/")
 for file in glob.glob("*.png"):
     temp = {}
+    theFileName, fileExtension = os.path.splitext(file)
     temp['filename'] = file
+    temp['thumbnail'] = theFileName + "_thumbnail" + fileExtension
     temp['average_colours'] = colorz(file)
+    temp['dimensions'] = Image.open(file).size
+
     data.append(temp)
 
 f = open('/tmp/data.json', 'w')

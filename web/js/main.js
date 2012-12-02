@@ -1,14 +1,16 @@
 require(["jquery", "lodash/lodash", "bootstrap"], function($, _) {
-    
-    var strImgSourceRoot="images/source/",
-        strImgThumbRoot="images/thumbs/";
+
+    var strImgSourceRoot = "images/source/",
+        strImgThumbRoot = "images/source/";
     $(function() {
 
         _fnDisplayPictures = function(objPictures) {
             _.each(objPictures, function(objPicture) {
-                var img = $('<img>');
-                img.attr('src', strImgSourceRoot+objPicture.filename);
-                img.appendTo('#pictures');
+                $('<img />').attr({
+                    src: strImgThumbRoot+objPicture.thumbnail
+                }).appendTo($('<a />').attr({
+                    href: strImgSourceRoot+objPicture.filename
+                }).appendTo($('#pictures')));
             });
 
         };
